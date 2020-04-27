@@ -1,0 +1,60 @@
+%\input{./head.tex}
+%\begin{document}
+	\newpage
+	\section{通用技术}
+	\subsection{Head}
+	\lstinputlisting{./source/head.cpp}
+	\newpage
+	\subsection{Vimrc}
+	\lstinputlisting[language=clean]{./source/vimrc}
+	\newpage
+	\subsection{对拍}
+	\subsubsection*{Linux}
+	\lstinputlisting[language=clean]{./source/cmp.sh}
+	\vspace{2cm}
+	\subsubsection*{Windows}
+	\lstinputlisting[language=clean]{./source/cmp.bat}
+	\newpage
+	\subsection{调试技巧}
+	主要从大大的 debug.pdf 里面摘了一些自己不熟悉的东西
+	\subsubsection{栈空间}
+	\paragraph{为本机分配尽量大的栈空间}~\\
+	\begin{lstlisting}[numbers=none]
+		ulimit -s unlimited
+	\end{lstlisting}
+	\paragraph{将栈空间调整为固定大小(单位：KB)}~\\
+	\begin{lstlisting}[numbers=none]
+		ulimit -s 131072
+	\end{lstlisting}
+	\paragraph{暗黑魔法——汇编开栈}~\\
+	\lstinputlisting{./source/stack.cpp}
+	~\\
+	\subsubsection{警告选项}
+	建议使用的警告选项：
+	\begin{itemize}
+		\item \lstinline|-Wall -Wextra|
+		\item \lstinline|-Wshadow|：防止局部变量不小心遮盖其他变量
+		\item \lstinline|-Wformat=2|：防止 \lstinline|printf|/
+		\lstinline|scanf| 写错
+		\item \lstinline|-Wconversion|：防止意外的类型转换
+		\end{itemize}
+	某些情况下有用的警告选项：
+	\begin{itemize}
+		\item \lstinline|-Wstack-usage=1|：看栈空间使用情况
+	\end{itemize}
+	~\\
+	\subsubsection{运行期检查工具}
+	\paragraph{Undefined Behavior Sanitizer：}~\\
+	直接在编译时开启编译选项~~ \lstinline|-fsanitize=undefined -g|\\
+	\paragraph{Address Sanitizer：}~\\
+	直接在编译时开启编译选项~~ \lstinline|-fsanitize=address -g|\\
+	\paragraph{Libstdc++ Debug Mode：}~\\
+	编译时使用~ \lstinline|-D\_GLIBCXX\_DEBUG|~打开调试模式\\
+	此时 libstdc++ 会插入两项运行时检查:迭代器安全性检查 和 算法前提条件检查\\
+	~\\
+	\subsubsection{性能分析工具}
+	\paragraph{gcov/-ftest-coverage -fprofile-arcs：}~\\
+		代码覆盖率检测，可以看代码中每一行被执行的次数(精确到行，但只能输出调用次数)\\
+	\paragraph{gprof/-pg：}~\\
+		代码剖析，可以看函数执行时间占总时间的百分比(输出的是时间，但只能精确到函数)\\
+%\end{document}

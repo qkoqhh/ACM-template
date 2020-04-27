@@ -1,0 +1,34 @@
+set nu
+set cindent
+set smarttab
+set shiftwidth=4
+set mouse=a
+ 
+nmap<c-v> "+p
+vmap<c-c> "+y
+nmap<c-a> ggVG
+inoremap ( ()<Esc>i
+inoremap [ []<Esc>i
+inoremap { {}<Esc>i
+inoremap ' ''<Esc>i
+inoremap " ""<Esc>i
+inoremap <Enter> <c-r>=P()<CR>
+inoremap <BS> <c-r>=D()<CR>
+func P()
+    let a=getline('.')
+    let n=col('.')-2
+    if a[n]=='{'&&a[n+1]=='}'
+    return "\<Enter>\<Esc>zzO"
+    end
+    return "\<Enter>"
+endf
+func D()
+    let a=getline('.')
+    let n=col('.')-2
+    if index(["(","[","{","\"","\'"],a[n])!=-1&&index([")","]","}","\"","\'"],a[n+1])!=-1
+    return "\<Right>\<BS>\<BS>"
+    elseif a[n]=='{'&&match(a,'}')&&match(getline(line('.')+1),'}')!=-1
+    return "\<Esc>jddk$dla"
+    end
+    return "\<BS>"
+endf

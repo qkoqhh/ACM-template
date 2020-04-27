@@ -1,0 +1,43 @@
+\documentclass[12pt,a4paper]{article}
+\usepackage{xeCJK}
+\usepackage{fancyhdr}%页眉页脚
+\usepackage{listings}%代码块
+\usepackage[margin=1in]{geometry}%页边距
+\usepackage{graphics}%图片
+\usepackage{fontspec}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{eqnarray}
+\usepackage{tabularx}
+%定义页眉页脚
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\selectfont \textsc{ACM Template}}
+\fancyhead[L]{\rightmark}
+\fancyhead[R]{Geometry Rhythm}
+%\lfoot{lfoot}
+%\cfoot{qkoqhh}
+\rfoot{\thepage}
+%\renewcommand{\footrulewidth}{0.5pt}
+
+%\rmfamily%罗马字体
+
+
+
+
+\lstset{
+	language=C,%代码的语言
+	numbers=left,%行号
+	frame=single,%
+	basicstyle=\footnotesize,
+	extendedchars=false,
+	basicstyle=\small\ttfamily,
+	%	tabsize=2,
+	breaklines=true,
+	showstringspaces=false
+}
+
+
+
+\title{ACM Template}
+\author{qkoqhh}

@@ -1,0 +1,122 @@
+%\input{head.tex}
+%\begin{document}
+	\newpage
+	\section{Other}
+	\subsection{矩阵树定理}
+	矩阵树定理用于生成树计数，构造基尔霍夫矩阵如下：
+	\begin{itemize}
+		\item $a[i][i]$ 为点 $i$ 的度数
+		\item $a[i][j]=a[j][i]$ 为点 $i$ 和 $j$ 之间的边数的相反数
+	\end{itemize}
+	然后求解该矩阵的 $n-1$ 阶子式即可，可直接求前 $(n-1)\times(n-1)$ 矩阵的行列式\\
+	\vspace{1cm}
+	~\\
+	在有向图中，若需要外向树计数，可构造基尔霍夫矩阵如下：
+	\begin{itemize}
+		\item $a[i][i]$ 为点 $i$ 的入度
+		\item $a[i][j]$ 为点 $i$ 到 $j$ 的边数的相反数
+	\end{itemize}
+	同样求解 $n-1$ 阶子式
+	\vspace{1cm}
+	~\\
+	附求解行列式的代码
+	\lstinputlisting{./source/matrix.cpp}
+	
+	\newpage
+	\subsection{蒙哥马利算法}
+	这个算法其实是用来解决RSA中计算公钥的问题的，是个底层常数优化算法。。\\
+	主要解决两个问题：
+	\begin{itemize}
+		\item 蒙哥马利约减，即 $tp^{-1} \pmod m$
+		\item 蒙哥马利乘模，即 $xy \pmod m$
+	\end{itemize}
+	这个算法的目的就是避免取模和除法来降低常数\\
+	算法过程，直接看杜教板子比看网上的博客来得简单。。\\
+	\subsubsection{预处理参数}
+	$b$ 为数制，这里所有的数都以 $b$ 进制的蒙哥马利表示法表示\\
+	$$
+	\begin{aligned}
+	p=b^k (p\ge m)\\
+	inv=m^{-1}\ \bmod\ p\\
+	r_2=p^2\ \bmod\ m\\
+	\end{aligned}	
+	$$
+	取 $b$ 进制是为了方便进行位运算，所以 $b$ 一般取 $2$，然后 $p$ 取 $2^{64}$\\
+	$2^{64}$ 的话取模的时候自然溢出就行了，比较方便\\
+	然后关于蒙哥马利表示法，就是 $x$ 的蒙哥马利表示为 $xp \bmod m$\\
+	所有数的运算都在此表示法下进行\\
+	\subsubsection{蒙哥马利约减}
+	若$t\le m^2$，可以用$(t-(t\times inv \bmod p)\times m )/p$  代替  $tp^{-1} \bmod  m$\\
+	证明：\\
+	因为
+	$$
+	t-t\times inv\times m\equiv t+t(-m^{-1}\times m)\equiv0\pmod p
+	$$
+	所以
+	$$
+	p|(t+t\times inv\times m)
+	$$
+	即
+	$$
+	p|(t+(t\times inv\bmod p)\times m)
+	$$
+	故有
+	$$
+	(t+(t\times inv\bmod p)\times m )/p\equiv tp^{-1}+(t\times inv\bmod p)p^{-1}m\equiv tp^{-1}\pmod m
+	$$
+	在数值上，由于\\
+	$$
+	\begin{aligned}
+	(t-(t\times inv\ mod \ p\times m)/p)\le m^2/p\le m\\
+	(t-(t\times inv\ mod \ p\times m)/p)\ge -m
+	\end{aligned}
+	$$
+	所以只需判断正负即可\\
+	然后就可以用蒙哥马利约减来求出一个数的蒙哥马利表示了，直接对$x\times r_2$进行约减即可\\
+	从蒙哥马利表示法中还原出原数也只需做一个约减就可以了\\
+	\subsubsection{蒙哥马利乘模}
+	令
+	$$
+	\begin{aligned}
+	\hat{x}=xp \bmod m\\
+	\hat{y}=yp \bmod m
+	\end{aligned}
+	$$
+	那么在蒙哥马利表示法中，$\hat{xy}=xyp$\\
+	即$\hat{xy} \ \equiv \ \hat{x}\hat{y}/p\pmod m$\\
+	直接对$x\times y$进行一次约减就可以了\\
+	\vspace{1.7cm}~\\
+	基本就这么多。。说那么多其实只要有板子就可以。。
+	\lstinputlisting{./source/mege.cpp}
+%	\newpage
+%	\subsection{行列式}
+%	\lstinputlisting{./source/}
+	\newpage
+	\subsection{gcc内建二进制函数}
+	\begin{itemize}
+		\item \lstinline|__builtin_popcount(x)| 表示 $x$ 二进制中 $1$ 的个数。
+		\item \lstinline|__builtin_parity(x)| 表示 $x$ 二进制中 $1$ 的个数的奇偶性。
+		\item \lstinline|__builtin_clz(x)| 表示 $x$ 二进制中前导 $0$ 的个数。
+		\item \lstinline|__builtin_ctz(x)| 表示 $x$ 二进制中结尾 $0$ 的个数。
+		\item \lstinline|__builtin_ffs(x)| 表示 $x$ 二进制中右起第一个 $1$ 的位置。
+	\end{itemize}
+	以上函数传入的参数为 unsigned int，如需对 unsigned long long 使用，需要在函数名的最后加上 ll，如 \lstinline|__builtin_popcountll|。\lstinline|__builtin_clz(x)| 和 \lstinline|__builtin_ctz(x)| 两者在 $x=0$ 时未定义
+	\newpage
+	\subsection{高精度}
+	不造从哪扒来的高精度板子，功能比较完整，只是不支持负数\\
+	\lstinputlisting{./source/biginteger.cpp}
+	\newpage
+	\subsection{python}
+	这里整合了我写过的所有的Python代码，少的可怜
+	\paragraph{Code1}~\\
+	\lstinputlisting[language=python]{./source/code3.py}
+	\newpage
+	\paragraph{Code2}~\\
+	\lstinputlisting[language=python]{./source/code1.py}
+	\newpage
+	\paragraph{Code3}~\\
+	\lstinputlisting[language=python]{./source/code2.py}
+%	\newpage
+%	\subsection{}
+%	\lstinputlisting{./source/}
+%\end{document}

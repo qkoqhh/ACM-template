@@ -1,0 +1,111 @@
+%\input{head.tex}
+%\begin{document}
+	\newpage
+	\section{动态规划}
+	\subsection{数位DP}
+	\lstinputlisting{./source/digit.cpp}
+	\newpage
+	\subsection{斜率优化}
+	这里仅提供写代码的样式
+	\vspace{0.5cm}
+	\lstinputlisting{./source/slope.cpp}
+	\newpage
+	\subsection{单调队列优化背包}
+	设 $d[i][j]$ 为前 $i$ 种物品体积为 $j$ 的最大价值\\
+	$$
+	d[i][j]=\max\{d[i-1][j-kv_i]+kw_i\}
+	$$
+	此时$0\leq k\leq \min\{\frac{j}{v_i},c[i]\}$\\
+	\\
+	令 $j=pv_i+q$，$k=p-k$，有\\
+	$$
+	d[i][j]=\max\{d[i-1][q+(p-k)v_i]+kw_i\}=\max\{d[i-1][q+kv_i]-kw_i\}+pw_i
+	$$
+	此时 $p-\min\{\frac{j}{v_i},c[i]\}\leq k\leq p$ ，即 $\max\{0,p-c[i]\}\leq k\leq p$\\
+	\\
+	然后考虑到枚举 $k$ 的时候 $k$ 一定为整数，所以直接 $p-c[i]\leq k\leq p $ 就行，然后发现这就是划窗\\
+	所以枚举 $q$ 后枚举 $k$，然后直接单调队列维护最值即可\\
+	\\
+	然后时间复杂度降成了 $O(nm)$ ，而且好像并不比二进制压缩复杂多少，所以以后就写单调队列了\\
+	\lstinputlisting{./source/bag.cpp}
+	\newpage
+	\subsection{悬线法}
+	如果找不含 $0$ 的最大子矩阵，这个子矩阵必然满足一个性质，就是这个子矩阵的边缘一定顶着 $0$ 或者是边界，根据这个性质可以降低计数的复杂度，先预处理三个数组 $up$ 和 $left$ 和 $right$，分别代表 $(i,j)$ 往上拓展的长度，还有往左拓展的边界和往右拓展的边界\\
+	然后再进行如下处理\\
+	若 $(i,j)$ 和 $(i,j-1)$ 可以为合法子矩阵的元素\\
+	$$
+	\begin{aligned}
+	left[i][j]&=&\min&\{left[i][j],left[i-1][j]\}\\
+	right[i][j]&=&\min&\{right[i][j],right[i-1][j]\}
+	\end{aligned}
+	$$\\
+	这样就能处理出以 $x=i$ 为底边，$(i,j)$ 为基点，拓展出去的子矩阵的边界\\
+	\lstinputlisting{./source/hangup.cpp}
+	\newpage
+	\subsection{决策单调性}
+	这里仅给出样例
+	\vspace{0.5cm}
+	\paragraph{题意}给定 $n$ 个数的序列，要求将序列分成 $m$ 段，使得这 $m$ 段的方差最小，输出方差乘上 $m^2$
+	\subsubsection{解法一：二分}
+	要保证整数，直接把 $m^2$ 乘积方差的和式里面变成 $(mx_i-sum_x)^2$，然后求这个的最小值就可以了\\
+	设 $a$ 为前缀和，设 $d[i][j]$ 为第 $i$ 段以 $j$ 位置为结尾的最小值\\
+	$$
+	d[i][j]=\max\{d[i-1][k]+(a[j]-a[k]-sum_x)^2\}
+	$$
+	而 $f(x)=(x-C)^2$ 是个下凸函数，即 $x$ 越大增长速度越快\\
+	考虑两个决策点 $k<v<i$，如果\\
+	$$
+	d[i-1][k]+(a[j]-a[k]-sum_x)^2<d[i-1][v]+(a[j]-a[v]-sum_x)^2
+	$$
+	那么此后随着 $j$ 增加，此后 $k$ 不会比 $v$ 更优\\
+	所以用决策单调性存递增的决策点，用上面的式子排除对头即可\\
+	\lstinputlisting{./source/opt1.cpp}
+	\newpage
+	\subsubsection{解法二：分治}把方差中的平方项
+	拆出来化为 $m\sum x_i^2-sum_x^2$\\
+	主要就是 $[x,y]$ 是当前的维护区间， $[l,r]$ 是决策区间，然后暴力求出 $mid$ 的决策点 $pos$，又根据决策单调性，$[x,mid-1]$ 的决策点必在 $[l,pos]$ 上，$[mid+1,y]$ 的决策点必在 $[pos,r]$ 上，然后一直分治下去就行了\\
+	\lstinputlisting{./source/opt2.cpp}
+	\vspace{0.5cm}
+	\subsubsection{解法三：斜率优化}~\\此处省略
+	\newpage
+	\subsection{DP凸优化}
+	\vspace{0.5cm}
+	这里只给出例题\\
+	\paragraph{题意}有 $n$ 户人家，要建 $m$ 个体育馆，要安排这 $m$ 个体育馆，使得每户到最近的体育馆的距离之和最小\\
+	大体是对建一个体育馆，即支配一个区间需要付出额外的代价 $t$，这样只要二分 $t$ 就能使最优决策时的区间数变成 $m$，从而直接无视 $m$ 的限制，直接做单调 $DP$\\
+	设 $d[i]$ 为到 $i$ 的代价\\
+	$$
+	d[i]=\max\{d[j]+cost(j+1,i)+t\}
+	$$
+	\\其中 $cost$ 函数满足四边形不等式，即有凸函数的性质，所以可以利用决策单调性二分决策点，然后优化成 $O(n\log n)$，总复杂度为 $O(nlognlogC)$ ，$C$ 为二分范围\\
+	感觉边界比较难处理，想用浮点数去二分的，然而会TLE\\
+	这个问题的解决方案在wqs的《浅析一类二分方法》一文中有提到，并指出直接用整数二分寻找分段数>=k的答案即可\\
+	\\
+	代码见下页\\
+	\newpage
+	\lstinputlisting{./source/wqs.cpp}
+	\newpage
+	\subsection{斯坦纳树}
+	\subsubsection{概念}
+	斯坦纳树问题是组合优化学科中的一个问题。将指定点集合中的所有点连通，且边权总和最小的生成树称为最小斯坦纳树（Minimal Steiner Tree），其实最小生成树是最小斯坦纳树的一种特殊情况。而斯坦纳树可以理解为使得指定集合中的点连通的树，但不一定最小。\\
+	求解斯坦纳树是NP问题，所以要关键点的个数要少(一般 $m\le 10$ )，然后才可以状压\\
+	\subsubsection{求解方法}
+	令 $d[i][j]$ 为覆盖了 $i$ 点集，$j$ 为根的树的最小权值\\
+	那么状态转移有两重：
+	\paragraph{第一重}：把两个子状态合并成一个状态
+	$$
+	d[i][j]=\max\limits_{t\subseteq i} (d[t][j]+d[i-t][j])
+	$$
+	复杂度 $O(V3^m)$\\
+	枚举子状态的时候可以参考挑战的位运算枚举方法\\
+	\paragraph{第二重}：在同一状态中进行转移（就是 $SPFA$ )\\
+	$$
+	d[state][j]=max(d[state]][j],d[state][i]+e[i][j])
+	$$
+	复杂度 $O(E2^m)$\\
+	\vspace{5.7cm}
+	\lstinputlisting{./source/mst.cpp}
+%	\newpage
+%	\subsection{}
+%	\lstinputlisting{./source/}
+%\end{document}

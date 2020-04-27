@@ -1,0 +1,430 @@
+%\input{head.tex}
+%\begin{document}
+	\newpage
+	\section{数论}
+	\subsection{约数个数上界}
+	\begin{center}
+		\renewcommand\arraystretch{1.5}
+		%		\renewcommand\tabcolsep{1pt}
+		\begin{tabular}{|l|c|c|c|c|c|c|c|c|c|}
+			\hline
+			$n\le$ & $10^1$ & $10^2$ & $10^3$& $10^4$& $10^5$& $10^6$& $10^7$ & $10^8$& $10^9$\\
+			\hline
+			$\max\{w(n)\}$&2&3&4&5&6&7&8&8&9\\
+			\hline
+			$\max\{d(n)\}$&4&12&32&64&128&240&448&768&1344\\
+			\hline
+			\hline
+			$n\le$ &$10^{10}$& $10^{11}$ & $10^{12}$ & $10^{13}$& $10^{14}$& $10^{15}$& $10^{16}$& $10^{17}$ & $10^{18}$\\
+			\hline
+			$\max\{w(n)\}$&10&10&11&12&12&13&13&14&15\\
+			\hline
+			$\max\{d(n)\}$&2304&4032&6720&10752&17280&26880&41472&64512&103680\\
+			\hline
+		\end{tabular}
+	\end{center}
+	~\\
+	\subsection{EXGCD}
+	\lstinputlisting{./source/exgcd.cpp}
+	~\\
+	\newpage
+	
+	\subsection{数论小笔记}
+	\paragraph{定义一}$(a,b)$ 代表最大公约数，$[a,b]$ 代表最小公倍数
+	\paragraph{同余性质的补充}注意一下性质7和性质9即可\\
+	性质1(反身性)：$a\equiv a\pmod m$\\
+	性质2(对称性)：若 $a\equiv b\pmod m$， 那么 $b\equiv a\pmod m$\\
+	性质3(传递性)：若 $a\equiv b\pmod m$，$b\equiv c\pmod m$ ,那么 $a\equiv c\pmod m$\\
+	性质4(可加减性)：若 $a\equiv b\pmod m$，$c\equiv d\pmod m$，那么 $a\pm c\equiv b\pm d\pmod m$\\
+	性质5(可乘性)：若 $a\equiv b\pmod m$，$c\equiv d\pmod m$，那么 $ac\equiv bd\pmod m$\\
+	证明：设 $a-b=km,c-d=lm$，则 $(ac-bd)=klm^2+(b+d)m$，所以$m|(ac-bd)$\\
+	性质6：若 $a\equiv b\pmod m$，那么 $an\equiv bn\pmod m$，其中 $n\in \mathbb{N}$\\
+	证明 ： $m|(a-b)\to m|n(a-b)$\\
+	性质7：若 $ac\equiv bc\pmod m$，$(c，m)=1$，那么 $a\equiv b\pmod m$\\
+	证明：$m|c(a-b),d=(m,c)$ => $\frac{m}{d}|(a-b) => a\equiv b\pmod{\frac{m}{d}}$ =>当 $d=1 $时 即 $(c,m)=1$ 上面结论成立\\
+	性质8：若 $a\equiv b\pmod m$，那么 $a^n\equiv b^n\pmod m$\\
+	证明：$a^n-b^k=(a-b)(a^(n-1)+a^(n-2)b\cdots b^(n-1))$,$m|(a-b)$ ==> $m|(a^n-b^n)$\\
+	性质9：若 $a\equiv b\pmod {m_1},a\equiv b\pmod {m_2}\cdots a\equiv b\pmod {m_i}$ 则 $a\equiv b\pmod{[m1,m2,..mi]}$\\
+	证明：$m_1 |(a-b),m_2|(a-b) ..m_i|(a-b)$=> $[m1,m2\cdots mi]|(a-b)$\\
+	推论：$m_1,m_2..m_i$ 两两互质，则 $a\equiv b\pmod{m_1m_2..m_i}$\\
+	\paragraph{定义二}定义在所有正整数上的函数称为算数函数\\
+	\paragraph{定义三}算数函数f如果满足对任意两个互素的正整数 $n$ 和 $m$，均有 $f(nm)=f(m)f(n)$，就称为积性函数(乘性函数)。如果对任意两个正整数 $n$ 和 $m$，均有 $f(nm)=f(n)f(m)$，就成为完全积性(乘性)函数。\\
+	\textbf{小推论：}对任意积性函数f(n)，满足f(1)=1\\
+	\paragraph{常见积性函数}~\\
+	恒等函数 $I(n)=1$\\
+	单位函数 $ id(n)=n$\\
+	幂函数 $id^k(n)=n^k$\\
+	元函数 $e(n)=[n=1]$      (狄利克雷卷积的乘法单位元)\\
+	除数函数 $\sigma _k(n)=\sum_{d|n}d^k$ (表示n的约数的k次幂和)\\
+	约束个数函数 $\tau (n)/d(n)=\sigma_0(n)=\sum_{d|n}1$(表示约数个数)\\
+	约数和函数 $\sigma(n)=\sigma_1(n)=\sum_{d|n}d$ (表示 $n$ 的约数之和)\\
+	欧拉函数 $\varphi(n)$\\
+	莫比乌斯函数 $\mu(n)$\\
+	\paragraph{定理一}如果 $f$  是一个积性函数，对任意正整数 $n$ 有素数幂分解 $n=p_1^{a_1}p_2^{a_2}\cdots p_k^{a_k}$，那么有 $f(n)=f(p_1^{a_1})f(p_2^{a_2})\cdots f(p_k^{a_k})$\\
+	证明：乘积因子之间互质，可以根据积性函数性质分解\\
+	\textbf{Ex定理一：}如果 $f$ 是积性函数，则 $f$ 的和函数 $F(n)=\sum_{d|n}f(d)$ 也是积性函数\\
+	证明：用狄利克雷卷积易得\\
+	\textbf{Ex定理二：}两个积性函数相乘仍为积性函数\\
+	证明：令 $h(n)=f(n)g(n)$，$h(nm)=f(nm)g(nm)=f(n)f(m)g(n)g(m)=h(n)h(m)$\\
+	\paragraph{定义四}欧拉函数 $\varphi(n)$ 指不超过 $n$ 且于 $n$ 互素的正整数的个数
+	\paragraph{定理二}如果 $p$ 是素数，那么 $\varphi(p)=p-1$；反之，如果 $\varphi(p)=p-1$，那么 $p$ 是素数\\
+	证明：此命题与 $1..p-1$ 均与素数 $p$ 互质等价
+	\paragraph{定理三}设 $p$ 为素数，$a$ 为一个正整数，那么 $\varphi (p^{a})=p^{a}-p^{a-1}=(p-1)*p^{a-1}$\\
+	证明：只有 $p$ 的倍数不与 $p^a$ 互质，故在 $p^a$ 基础上减去 $(p^a)/p=p^{a-1}$
+	\paragraph{定理四}欧拉函数为积性函数，即 $\varphi (nm)=\varphi(n)\varphi(m)$\\
+	证明：
+	证明方法很多，下面给出最易懂的证明，因为其他证明窝看不懂orz
+	设 $n$ 与 $m$ 互质，构造如下矩阵，包含 $nm$个数
+	$$
+	\begin{matrix}
+	1&2&\cdots&r&\cdots&m\\
+	m+1&m+2&\cdots&m+r&\cdots&2m\\
+	2m+1&2m+2&\cdots&2m+r&\cdots&3m\\
+	\vdots&\vdots&&\vdots&&\vdots\\
+	(n-1)m+1&(n-1)m+2&\cdots&(n-1)m+r&\cdots&nm
+	\end{matrix}
+	$$
+	由定义要从矩阵中选出与 $nm$ 互素的数，其行号 $i$ 须满足 $(i,n)=1$，共有 $\varphi(n)$ 个满足条件的 $i$	其列号须满足 $(j,m)=1$，共 $\varphi(m)$ 个满足条件的 $j$\\
+	综上共有 $\varphi(n)\varphi(m)$ 个数与 $nm$ 互质，即 $\varphi (nm)=\varphi(n)\varphi(m)$\\
+	\paragraph{定理五}设 $n=p_1^{a_1}p_2^{a_2}...p_s^{a_s}$ 为正整数 $n$ 的素数幂分解，那么
+	$$
+	\varphi(n)=n(1-\frac{1}{p_1})(1-\frac{1}{p_2})...(1-\frac{1}{p_k})
+	$$
+	证明：结合定理一、定理二、定理四对 $\varphi(n)$ 进行素数幂分解，得
+	$$
+	\begin{aligned}
+	\varphi(n)=&\varphi(p_1^{a_1})\varphi(p_2^{a_2})...\varphi(p_k^{a_k})\\  =&(p_1-1)p_1^{a_1-1}(p_2-1)p_2^{a_2-1}...(p_k-1)p_k^{a_k-1}\\ =&(1-\frac{1}{p_1})p_1^{a_1}(1-\frac{1}{p_2})p_2^{a_2}...(1-\frac{1}{p_k})p_k^{a_k}\\ =&n*(1-\frac{1}{p_1})(1-\frac{1}{p_2})...(1-\frac{1}{p_k})
+	\end{aligned}
+	$$\\
+	\textbf{推论：}当 $n$ 为奇数时，有 $\varphi(2n)=\varphi(n)$\\
+	\paragraph{定理六}设 $n$ 是一个大于 $2$ 的正整数，那么 $\varphi(n)$ 是偶数\\
+	证明：对任意与 $n$ 互质的数 $m$ ，有 $(n,m)=(n,n-m)=1$。当 $n>2$ 时，$n$ 与 $\frac{n}{2}$ 必不互质，那么有 $m\neq n-m$，即所有与 $n$ 互质的数成对出现，故 $\varphi(n)$ 为偶数\\
+	\paragraph{定理七}$\displaystyle \sum_{d|n}\varphi(d)=n$\\
+	证明：构造序列 $\displaystyle \frac{1}{n},\frac{2}{n},\frac{3}{n}...\frac{n}{n}$，并进行约分\\
+	若分数 $\frac{a}{b}$ 在上面出现，则满足 $b|n$ 和 $(a,b)=1$\\
+	对同一个 $b$ ，满足条件的 $a$ 有 $\varphi(b)$个，于是上面 $n$ 个分数根据分母 $b$ 被分为 $\sum_{b|n}\varphi(b) $ 个，得证\\
+	\paragraph{定义五}定义小于 $n$ 且和 $n$ 互质的数构成的集合为 $Z_n$ ，称呼这个集合为 $n$ 的完全余数集合。 显然 $\left|Z_n\right|=\varphi(n) $。
+	\paragraph{定理八(欧拉定理)}对于互质的正整数 $a$ 和 $n$，$a^{\varphi(n)}\equiv1\pmod n$\\
+	证明：令完全余数集合 $Z_n=\left \{x_1,x_2,x_3...x_{\varphi(n)}\right\}$
+	\\令$S=\left\{ax_1\pmod n,ax_2\pmod n,....,ax_{\varphi(n)}\pmod n\right\}$ \\
+	先证 $Z_n=S$\\
+	因为 $a$ 与 $n$ 互质， $x_i(1 \le i \le \varphi(n))$ 与 $n$ 互质， 所以 $a x_i$  与 $n$ 互质，所以 $a  x_i  \bmod n \in Zn$ \\
+	若 $i \neq j$ ， 那么 $x_i \neq x_j$，有 $0 < x_i - x_j < n$，又 $a$ 与 $n$ 互质，得 $a  ( x_i - x_j ) \bmod n \neq 0$  ，所以 $a  x_i  \neq a  x_j \pmod n$ (消去律)\\
+	进而得\\
+	$$
+	\begin{aligned}
+		a^{\varphi(n)}x_1x_2\cdots x_{\varphi(n)}&\equiv~(ax_1)(ax_2)...(ax_{\varphi(n)}) &\pmod n\\ 
+		a^{\varphi(n)}x_1x_2\cdots x_{\varphi(n)}& \equiv~ x_1x_2\cdots x_n &\pmod n\\
+		a^{\varphi(n)}&\equiv~1 &\pmod n\\
+	\end{aligned}
+	$$
+	\paragraph{推论(费马小定理)}若 $p$ 为质数，对于互质的正整数 $a$ 和 $p$，$a^{p-1}\equiv 1\pmod p$
+	除了用欧拉定理推导费马小定理，还有一种直接证明的方法：（课上学的）\\	
+	对一个余数 $r$ ，$1\le r\le p-1$，对 $r$ 逐次乘上任意一个数 $a$ 满足 $(a,p)=1$，有 $a^sr\mid p$，由容斥原理，当 $s>n$，必有 $a^sr$与之前的数重复\\
+	考虑最早出现重复的情况，若 $a^sr\equiv a^kr\pmod p$，有 $a^{s-k}r\equiv r\pmod p$，因此最早出现重复的情况只能是 $a^{s}r\equiv r\pmod p$\\
+	因此根据这个性质我们可以把 $1\cdots p-1$ 分成一个个环，当给 $1\cdots p-1$ 乘 $a$ 模 $p$ 时，会依次得到 $p-1$ 的排列，即
+	$$
+	(1a)(2a)(3a)..((p-1)a)\equiv (p-1)!\pmod p
+	$$
+	进而得 $a_{p-1}\equiv1\pmod p$\\
+	\paragraph{定理九}当 $n>1$ 时，$1\cdots n$ 中与 $n$ 互质的整数和为 $\frac{n\varphi(n)}{2}$\\
+	证明：对任意与 $n$ 互质的数 $m$ ，有 $gcd(n,m)=gcd(n,n-m)=1$，即对任意 $m$ 必有 $n-m$ 与 $n$ 互质，利用倒序相加法可证
+	\paragraph{Ex定理一(欧拉降幂)} $a^k\equiv a^{k\bmod \varphi(m)+\varphi(m)}\pmod m$ ($k>\varphi(m)$)\\
+	证明：首先，若 $a$ 与 $m$ 互质，由欧拉定理可知 $a^k\equiv a^{k\bmod \varphi(m)}\pmod m$ ，即证上式\\
+	若 $(a,m)>1$，证明就比较长了，分为好几步\\
+	先证 $(t,a)=1$ ，其中 $t=\frac{m}{(m,a^{\varphi(m)})}$\\
+	显然构造 $t$ 是为了排除 $a$ 的因子，而对 $a$ 和 $m$ 的一个公共素因子，有 $v\varphi(m)>=(p_i-1)p_i^(k-1)>k$，所以 $a^{\varphi(m)}$ 足够排除所有公共素因子，所以这 $t$ 和 $a$ 互质
+	由于 $t$ 是 $m$ 的因子，所以根据欧拉函数的素因子分解式，存在 $k$ 使 $\varphi(m)=k\varphi(t)$ ，故有
+	$$
+	a^{\varphi(m)}\equiv a^{k\varphi(t)}\equiv(a^{\varphi(t)})^k\equiv1\pmod t
+	$$
+	得 $t|(a^{\varphi(m)}-1)$\\
+	两边同乘 $(m,a^{\varphi(n)})$\\
+	$m|(m,a^{\varphi(m)})(a^{\varphi(m)}-1)$\\
+	即 $m|a^{\varphi(m)}(a^{\varphi(m)}-1)$\\
+	即 $m|a^{\varphi(m)}(a^{\varphi(m)}-1)$\\
+	所以将 $k$ 分解为 $k=p\varphi(m)+q$，其中 $q=k\bmod \varphi(m)$，可得
+	$$
+	a^k\equiv a^{\varphi(m)+q}\equiv a^{k\bmod \varphi(m)+\varphi(m)}\pmod m
+	$$
+	~\\
+	\paragraph{定义六}因子和函数 $\sigma$ 定义为整数 $n$ 的所有正因子之和，记为 $\sigma(n)$
+	\paragraph{定义七}因子个数函数 $\tau$ 定义为正整数 $n$ 的所有正因子个数，记为 $\tau(n)$
+	\paragraph{定理十}因子和函数 $\sigma$ 和因子个数函数 $\tau$ 是积性函数\\
+	证明：设 $n$ 与 $m$ 互质，$\sigma(n)=k$，$\sigma(m)=s$， $n$ 的因子为 $x_1,x_2,x_3\cdots x_k$，$m$ 的因子为 $y_1,y_2\cdots y_s$\\
+	那么 $nm$ 的因子为 $x_1y_1,x_1y_2\cdots x_1y_s,x_2y_1,x_2y_2\cdots,x_2y_s\cdots \cdots x_ky_1,x_ky_2\cdots x_ky_s$ 共有 $ks$ 个因子，所以 $\sigma(nm)=\sigma(n)\sigma(m)$，$\sigma(n)$ 为积性函数\\
+	同理
+	$$
+	\tau(nm)=\sum_{i=1}^{k}\sum_{j=1}^{s}x_iy_j=\sum_{i=1}^{k}x_i\sum_{j=1}^{s}y_j=\tau(n)\tau(m)
+	$$
+	故 $\tau(n)$ 为积性函数
+	\paragraph{定理十一} $\displaystyle \sigma(p^k)=1+p+p^2+..+p^k=\frac{p^{k+1}-1}{p-1}$
+	\paragraph{定理十二} $\displaystyle \tau(p^k)=k+1$\\
+	~\\
+	\paragraph{定义八}莫比乌斯函数
+	$$
+	\mu(n)=\left\lbrace
+	\begin{matrix}
+	1&n=1\\
+	(-1)^k&n=p_1p_2\cdots p_k\\
+	0&othersise\\
+	\end{matrix}
+	\right.
+	$$
+	\paragraph{定理十三}莫比乌斯函数为积性函数
+	\paragraph{定理十四} $\displaystyle \sum_{d|n}\mu(d)=[n=1]$\\
+	证明：由于产生影响的项为 $n=1$ 和不同素数相乘的项，故考虑将 $n$ 的素因子 $p_1,p_2,p3\cdots p_k$ 相互组合形成的数\\
+ 	则根据二项式定理上式可化为 $\sum_{i=0}^{k}\binom{k}{i}(-1)^i=(1-1)^k$\\
+ 	等价于 $[n=1]$
+ 	\paragraph{定理十五(莫比乌斯反演)}~\\
+ 	形式一：\\
+ 	若 $\displaystyle F(n)=\sum_{d|n}f(d)$，则有 $\displaystyle f(n)=\sum_{d|n}\mu(d)F(\frac{n}{d})$\\
+ 	形式二：\\
+ 	若 $\displaystyle F(n)=\sum_{n|d}f(d)$，则有 $\displaystyle f(n)=\sum_{n|d}\mu(\frac{d}{n})F(d)$\\
+ 	证明：\\
+ 	形式一：
+ 	$$
+ 	\begin{aligned}
+ 	\sum_{d|n}\mu(d)F(\frac{n}{d})=&\sum_{d|n}\mu(d)\sum_{k|\frac{n}{d}}f(k)\\=&\sum_{k|n}f(k)\sum_{d|\frac{n}{k}}\mu(d)\\=&\sum_{k|n}f(k)[\frac{n}{k}=1]\\=&f(n)
+ 	\end{aligned}
+ 	$$
+ 	形式二：
+ 	$$
+ 	\begin{aligned}
+ 	\sum_{n|d}\mu(\frac{d}{n})F(d)=&\sum_{k=1}^{+\infty }\mu(k)F(kn)\\=&\sum_{k=1}^{+\infty}\mu(k)\sum_{kn|d}f(d)\\=&\sum_{n|d}f(d)\sum_{k|\frac{d}{n}}\mu(k)\\=&\sum_{n|d}f(d)[\frac{d}{n}=1]=f(n)
+ 	\end{aligned}
+ 	$$\\
+ 	\paragraph{定义九(狄利克雷卷积)}对 $2$ 个算术函数 $f$,$g$，定义其 Dirichlet卷积为新函数 $f*g$ ，满足 $\displaystyle (f*g)(n)=\sum_{d|n}f(d)g(\frac{n}{d})$\\
+ 	\paragraph{狄利克雷卷积的性质}~\\
+ 	交换律： $f * g = g * f$\\
+ 	结合律 ：$( f * g ) * h = f * ( g * h )$\\
+ 	单位元 ：$f * e = f$\\
+ 	分配律： $f * ( g + h ) = f * g + f * h$\\
+ 	证明：交换律和分配律可根据和式的性质证明，单位元显然成立
+ 	$$
+ 	\begin{aligned}
+ 	(f*g)*h(n)=\sum_{d|n}h(\frac{n}{d})\sum_{k|d} f(k)g(\frac{d}{k})=\sum_{ijk|n}f(i)g(j)h(k)
+ 	\\
+ 	f*(g*h)(n)=\sum_{d|n}f(\frac{n}{d})\sum_{k|d} g(k)h(\frac{d}{k})=\sum_{ijk|n}f(i)g(j)h(k)
+ 	\end{aligned}
+ 	$$
+ 	可得结合律成立
+ 	\paragraph{定理十}两个积性函数的狄利克雷卷积仍为积性函数
+ 	证明：设 $h = f * g$ ，$n$ 与 $m$ 互质，对 $n$ 和 $m$ 进行素因子分解，有
+ 	$$
+ 	\begin{aligned}
+ 	 	 n=p_1^{a_1}p_2^{a_2}...p_k^{a_k}\\m=q_1^{b_1}q_2^{b_2}...q_s^{b_s}
+ 	\end{aligned}
+ 	$$
+ 	故
+ 	$$
+ 	\begin{aligned}
+ 	h(nm)=&\sum_{d|nm}f(d)g(\frac{nm}{d})\\
+ 	h(n)=&\sum_{d|n}f(d)g(\frac{n}{d})\\
+ 	h(m)=&\sum_{d|m}f(d)g(\frac{m}{d})\\
+ 	\end{aligned}
+ 	$$
+ 	对 $h(nm)$ 中的每一项 $d$，对其进行素因子分解，可得 $d=p_1^{c_{11}}p_2^{c_{12}}...p_k^{c_{1k}}q_1^{c_{21}}q_2^{c_{22}}...q_s^{c_{2s}}$\\
+ 	在 $h(n)$ 和 $h(m)$ 中，仅有一项 $x$ 和 $y$，满足 $d=xy$，且 $x$ 和 $y$ 分别为\\
+ 	$$
+ 	\begin{aligned}
+ 	x=p_1^{c_{11}}p_2^{c_{12}}...p_k^{c_{1k}}\\ 
+ 	y=q_1^{c_{21}}q_2^{c_{22}}...q_s^{c_{2s}}
+ 	\end{aligned}
+ 	$$
+ 	由此可得，$h(nm)$ 中的每一项均从 $h(n)$ 的对应项和 $h(m)$ 的对应项相乘而成，故 $h(nm)=h(n)h(m)$，得证
+ 	\paragraph{定理十二} $\displaystyle \sum_{d|n}\frac{n}{d}\mu(d)=\varphi(n)$\\
+ 	证明：结合 $\sum_{d|n}\varphi(d)=n$ 和莫比乌斯反演定理可得
+ 	\paragraph{小结}~\\
+ 	$$
+ 	\begin{aligned}
+ 	1*\mu=e\\
+ 	\varphi *1=id\\
+ 	\mu *id=\varphi
+ 	\end{aligned}
+ 	$$
+	\newpage
+	\subsection{min25筛}
+	这里主要阐述一下算法流程和放一下模板
+	\subsubsection{预处理}
+	\textbf{\large 准备工作}\\
+	
+	积性函数中，最重要的是素数，为了求一个积性函数 $f(i)$ 的前缀和，我们先要求 $\sum_p f(p)$ ，即所有素数的函数值的和
+	
+	这即是 min25 筛的预处理步骤，由于自变量为素数，所以对应的函数形式也比较简单，我们可以以这个函数( min25 筛中要求这个函数为完全积性函数且前缀和比较容易求得 )来进行筛法，将该函数记为 $F(n)$\\
+	\paragraph{注意	}\textbf{由于 1 没有最小素因子，min25 筛求解时先暂时忽略 $f(1)$ 的影响}\\
+	~\\
+	记 $p_i$ 为第 $i$ 小的素数\\
+	记 $lpf(n)$ 为 $n$ 的最小素因子\\
+	\paragraph{引理}  $\forall i\le n$ ，若 $lpf(i)> \sqrt n$ ，则 $i$ 为质数
+	设
+	$$
+	f(n,j)=\sum_{lpf(i)>p_j||i\in prime}^{i\le n} F(i)
+	$$
+	可以发现 $f(i,j)$ 是在模拟埃式筛法的过程\\
+	有引理可以发现，我们只需要将所有小于等于 $\sqrt n$ 的素数筛完即可\\
+	记 $m$ 为最大的满足 $p_m\le\sqrt n$ \\
+	并预处理\\
+	$$
+	pre(n)=\sum_{i=1}^nF(p_j)
+	$$
+	这里只需要预处理到 $m$ 即可，将在下文筛法中用到\\
+	~\\
+	~\\
+	\textbf{\large 计算}\\
+	~\\
+	初始状态为
+	$$
+	f(i,0)=\sum_{j=2}^iF(j)
+	$$
+	考虑在当前状态中再筛去 $p_j$ ，即筛去 $\forall lpf(i)=p_j$ ，则有
+	$$
+	f(i,j)=f(i,j-1)-F(p_j)(f(\lfloor\frac{i}{p_j}\rfloor,j-1)-pre(j-1))
+	$$
+	实现时可以考虑按 $i$ 从大到小更新 $f[]$ 数组\\
+	~\\
+	\textbf{\large 复杂度分析}\\
+	~\\
+	可以发现，如果只是求 $f(n,m)$ ， $i$ 的有效值个数为 $O(\sqrt n)$ \\
+	另外，用 $p_j$ 更新函数值时，若 $i<p_j^2$ ， $f(i,j)=f(i,j-1)$ 。即 $p_j$ 只会更新 $i\ge p_j^2$ 的函数值\\
+	那么考虑个 $i$ 被更新的次数，其复杂度为
+	$$
+	\sum_{i=1}^{\sqrt n}\frac{\sqrt i}{\ln \sqrt i}+ \sum_{i=1}^{\sqrt n} \frac{\sqrt \frac{n}{i}}{\ln \sqrt \frac{n}{i}}\le\frac{n^{\frac{3}{4}}}{\ln n}
+	$$\\
+	~\\
+	~\\
+	~\\
+	\subsubsection{递归求前缀}
+	求得素数的函数和之后，就能够为求前缀和带来便利\\
+	设
+	$$
+	S(n,j)=\sum_{lpf(i)\ge p_j}^{i\le n} f(i)
+	$$
+	和 $f(n,m)$ 的求解相反，我们需要求出 $S(n,1)$\\
+	依次枚举最小素因子，可以得到
+	$$
+	S(n,j)=f(n,m)-pre(j-1)+\sum_{k=j}^m(\sum_e^{p_k^e\le n}f(p_j^e)(S(\lfloor\frac{n}{p_j^e}\rfloor,k+1)+\sum_{e=2}^{p_j^e\le n}f(p_k^e))
+	$$
+	这里直接递归即可，不用记忆化\\
+	~\\
+	\textbf{\large 复杂度分析}\\
+	还不会\\
+	~\\
+	~\\
+	~\\
+	代码见下页
+	\newpage
+	\lstinputlisting{./source/min25.cpp}
+	\newpage
+	\subsection{二次剩余}
+	\paragraph{题意}~\\
+	求解 $x^2\equiv t\pmod p$\\
+	\paragraph{解法}~\\
+	欧拉准则：\\
+	令勒让德符号 $\left(\frac{t}{p} \right)=t^{\frac{p-1}{2}}\bmod p$\\
+	当 $\left(\frac{t}{p}\right)=0$ 时， $p|t$\\
+	当 $\left(\frac{t}{p}\right)=1$ 时， $t$ 为二次剩余\\
+	当 $\left(\frac{t}{p}\right)=-1$ 时， $t$ 为非二次剩余\\
+	证明：\\
+	$t$ 与 $p$ 不互质显然$\left(\frac{t}{p}\right)=0$\\
+	当 $t$ 与 $p$ 互质\\
+	$$
+	t^{p-1}\equiv1\pmod{p}
+	$$
+	所以\\
+	$$
+	t^{\frac{p-1}{2}}\equiv\pm1\pmod p
+	$$
+	必要性：\\
+	当 $t$ 为二次剩余，那么存在 $x$ ，满足\\
+	$$
+	\begin{aligned}
+	x^2&\equiv&t&\pmod p\\
+	x^{p-1}&\equiv&t^{\frac{p-1}{2}}&\pmod p\\
+	t^{\frac{p-1}{2}}&\equiv&1&\pmod p
+	\end{aligned}
+	$$
+	充分性：\\
+	令 $g$ 为 $p$ 的一个原根，且 $t=g^k$ ，那么\\
+	$$
+	g^{\frac{k(p-1)}{2}}\equiv 1 \pmod p
+	$$
+	由于 $g$ 的指标是 $p-1$ ，所以 $\frac{k(p-1)}{2}|(p-1)$ ，即 $\frac{k}{2}|1$ \\
+	所以 $k|2$ ，$t$ 为一个二次剩余\\
+	那么 $-1$ 的情况也一起证明了\\
+	~\\
+	有这个结论就可以用于构造了，任取一个数 $a$ ，满足 $w=a^2-t$ 为一个非二次剩余，那么 $x=(a+\sqrt w)^{\frac{p+1}{2}}$ 为一个二次剩余方程的解\\
+	证明：\\
+	首先证明 $(a+b)^p\equiv a^p+b^p\pmod p$\\
+	这个其实模方程的一个结论，因为展开之后会有二项式系数 $\binom{p}{i}$ ，由于 $p$ 为素数，所以只有第一项和最后一项不会被 $p$ 整除\\
+	然后有
+	$$
+	\begin{aligned}
+	(a+\sqrt w)^{p+1}&=(a+\sqrt w)(a^p+{\sqrt w}^p)
+	\\&=(a+\sqrt w)(a+w^{\frac{p-1}{2}}\sqrt w)
+	\\&=(a+\sqrt w)(a-\sqrt w)
+	\\&=a^2-w
+	\\&=n\pmod p
+	\end{aligned}
+	$$
+	可是既然 $w$ 是非二次剩余，那又如何用 $\sqrt w$ 计算呢？把他们都看成 $x+y\sqrt w$ 的形式，不管这个数做何种运算，都会像复数一样最终化成 $x+y\sqrt w$ 的形式，因此只要算系数 $x$ 和 $y$ 就可以了，然后直接做快速幂即可。。\\
+	~\\
+	~\\
+	\paragraph{代码实现}~\\
+	\lstinputlisting{./source/sqrt.cpp}
+	
+	\newpage
+	\subsection{BSGS}
+	这个板子需要特判 $a=0$ 的情况\\
+	\lstinputlisting{./source/bsgs.cpp}
+	\newpage
+	\subsection{EXBSGS}
+	EXBSGS 就是在 BSGS 的基础上疯狂约去 GCD\\
+	\lstinputlisting{./source/exbsgs.cpp}
+	\newpage
+	\subsection{N次剩余/原根}
+	求解 $x^a\equiv b(mod\,p)$\\
+	由于 $p$ 为质数，令 $g$ 为 $p$ 的一个原根\\
+	那么 $a\,ind_gx\equiv ind_gb(mod\,\,\varphi(p))$\\
+	原根的求解可以依次枚举 $g$ ，检验 $g^d\equiv 1(mod\,p)$ ，其中 $d<\varphi(p)$\\
+	如果这个 $d$ 存在，那么 $d$ 的倍数也必然成立，那么只要取 $d=\frac{\varphi(p)}{p_i}$ 检验即可，其中 $p_i$ 为$\varphi(p)$ 的素因子\\
+	由于原根的大小一般在 $O(n^{0.25})$ 以内，所以求原根的复杂度为 $O(n^{0.25}logp\times loglogp)$\\
+	求出 $g$ 之后利用 $BSGS$ 求出 $ind_gb$ 进而求出 $ind_gx$ 即可\\
+	\lstinputlisting{./source/nsqrt.cpp}
+	\newpage
+	\subsection{奇模数N次剩余}
+	模数是奇数应该是为了保证原根的存在。。\\
+	设原方程解为 $X$\\
+	然后由于模数可以为合数所以要用 $CRT$ 分解，类似\\
+	$$
+	x^a\equiv b(mod\,\,p^k)
+	$$
+	设其解为 $w_1,w_2...w_j$ ，那么
+	$$
+	X\equiv w_j(mod\,\,p^k)
+	$$
+	必有且仅有一个成立\\
+	这样可以组成若干个方程组，根据 $CRT$  一个方程组在模数范围内仅有一解，那么解的个数即为方程组的个数，所以只需要计算每个方程组的解集大小，直接相乘即可。。\\
+	回到
+	$$
+	x^a\equiv b(mod\,\,p^k)
+	$$
+	此时模数不是质数，不能直接求对数\\
+	当 $(b,p^k)=1$ ，此时可以直接求对数后求解，若存在解，那么解个数为 $gcd((p-1)p^{k-1},a)$\\
+	当 $b\bmod p^k=0$ ，那么 $x=Cp^t$ ，那么 $at\geq k$ ，所以 $t=\left\lceil \frac{k}{a} \right\rceil$\\
+	那么解个数为
+	$$
+	\frac{p^k}{p^t}=p^{k-\left\lceil \frac{k}{a} \right\rceil}
+	$$
+	当 $1<(b,p^k)<p^k$ ，令 $b=Bp^{cnt}$ ，那么
+	$$
+	\left(\frac{x}{p^{\frac{cnt}{a} }}  \right)^a\equiv B(mod\,\,p^{k-cnt})
+	$$
+	此时满足 $a|cnt$ 才有解，然后就可以求离散对数了。。\\
+	但是解集的范围均落在 $[0,p^{k-cnt})$ 之间，那么需要将解集扩大到 $[0,p^{k-\frac{cnt}{a}})$ ，所以方案数要乘上 $p^{cnt-\frac{cnt}{a}}$\\
+	相当考验板子。。\\
+	\lstinputlisting{./source/nsqrt2.cpp}
+%	\newpage
+%	\subsection{}
+%	\lstinputlisting{./source/}
+%\end{document}

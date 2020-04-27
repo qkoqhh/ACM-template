@@ -1,0 +1,57 @@
+%\input{head.tex}
+%\begin{document}
+	\newpage
+	\section{计算几何}
+	\subsection{Pick定理}
+	一个计算点阵中顶点在格点上的多边形面积公式,该公式可以表示为 $2S=2a+b-2$,其中 $a$ 表示多边形内部的点数, $b$ 表示多边形边界上的点数,$S$ 表示多边形的面积。\\
+	\subsection{求凸包}
+	Graham 算法\\
+	\lstinputlisting{./source/graham.cpp}
+	\newpage
+	\subsection{平面最近点对}
+	\lstinputlisting{./source/pointpair.cpp}
+	\newpage
+	\subsection{半平面交}
+	这里仅给出了几个例题
+	\subsubsection{求多边形的核}
+	思路是让半平面按极角排序。。然后依次加入队列中排除多余半平面即可。。  \\
+	细节非常多。。例如:加入队列时要先去队尾再去队首。。最后要先去队首再去队尾。。\\
+	然后 cmp那块if判断叉积是否为正时不造为什么老是要丢掉后面的>eps。。。\\
+	还有。。就是那个求交点的intersect。。有个玄学公式。。\\
+	\lstinputlisting{./source/halfplane.cpp}
+	\subsubsection{线性规划}
+	首先是把方程转化为半平面,这对用 $n^2$ 的人来说并不难。。他们只需要用到直线方程。。\\
+	然而对使用 $nlogn$ 的人来说,需要的反而是直线上的两点,这种逆变换感觉并没有什么优雅的姿势去解决。。\\
+	窝是这么解的。。首先先找出半平面的方向,即倾斜角 $k$。。然后再找特殊点,在特殊点的基础之上分别加上 $\cos t$和 $\sin t$ 即可。。\\
+	然后倾斜角 $t$ 要怎么找。。以 $Ax+By+C<0$ 为例:\\
+	这里用到了直线方程的另外一种理解,点乘为定值的集合,这样可以通过向量 $n$ 迅速找到和 $t$ 的关系,将 $n$ 旋转 $90$ 度后倾斜角就已经是 $t$ 了,所以 $t=atan2(B,A)$\\
+	特殊点窝取了 $y=0$ ,考虑直线和 $y$ 垂直的情况,需要特判一下才能取特殊点。。\\
+	转化为半平面后直接半平面交吧。。\\
+	\lstinputlisting{./source/halfplane2.cpp}
+	\newpage
+	\subsection{旋转卡壳}
+	\subsubsection{平面最远点对}
+	旋转卡壳的主要思路就是先把凸包求出来,然后逆时针枚举凸包的每条边,找用最大
+	三角形面积找最远点,由于是逆时针枚举边,所以最远点也是逆时针移动的,这样可
+	以分开枚举,把复杂度降到O(n),然后复杂度还是降在了求凸包上面。。然后在找到
+	最远点的基础上再求一下边端点到最远点的距离进而求出最远点对。。  
+	
+	然后有一个地方坑了我好久。。。初始化最远点要从2开始枚举。。。因为第一条边包
+	含1点和2点,从1开始枚举1点和2点的距离明显到边的距离都是0,就不能顺下去找最
+	远点了。。谨记。。。\\
+	\lstinputlisting{./source/rot1.cpp}
+	
+	\subsubsection{两凸包间最小距离}
+	这个是取了 $A$ 凸包的最低点和 $B$ 凸包的最高点,作用。。。个人感觉就是保证第一次找
+	的时候是最近点,以便后续进行下去。。然后在 $A$ 凸包上找点,在 $B$ 凸包上找边,枚举
+	边,然后在 $A$ 凸包逆时针找最近点。。由于 $B$ 凸包边的枚举顺序也是逆时针,所以可以
+	分开枚举。。然后复杂度就降到 $O(n)$ 了。。\\
+	\lstinputlisting{./source/rot2.cpp}
+	\newpage
+	\subsection{最小覆盖圆}
+	~\\
+	\lstinputlisting{./source/covercircle.cpp}
+%	\newpage
+%	\subsection{}
+%	\lstinputlisting{./source/}
+%\end{document}
