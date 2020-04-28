@@ -6,4 +6,4 @@
 
 **Organization: [Xidian University](https://github.com/xdu-icpc)**
 
-**Release: [release 1.0](https://github.com/qkoqhh/ACM-template/releases) **
+**Release: [release 1.0](https://github.com/qkoqhh/ACM-template/releases)**
